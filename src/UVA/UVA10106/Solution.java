@@ -1,4 +1,4 @@
-package UVA10106;
+package UVA.UVA10106;
 
 import java.io.BufferedReader;
 import java.io.IOException;

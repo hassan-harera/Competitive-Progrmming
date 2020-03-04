@@ -1,5 +1,7 @@
 package UVA.UVA12148;
 
+
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,7 +16,6 @@ public class Solution {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer stk;
         StringBuilder sb = new StringBuilder();
-        String str;
 
         int n;
         while ((n = Integer.parseInt(in.readLine())) != 0) {
