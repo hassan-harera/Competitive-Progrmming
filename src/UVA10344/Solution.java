@@ -25,9 +25,9 @@ public class Solution {
             }
             return;
         }
-        solve(i+1, a+arr[i]+arr[i+1]);
-        solve(i+1, a+arr[i]*arr[i+1]);
-        solve(i+1, a+arr[i]-arr[i+1]);
-        solve(i+1, a+arr[i]/arr[i+1]);
+        solve(i + 1, a + arr[i] + arr[i + 1]);
+        solve(i + 1, a + arr[i] * arr[i + 1]);
+        solve(i + 1, a + arr[i] - arr[i + 1]);
+        solve(i + 1, a + arr[i] / arr[i + 1]);
     }
 }
