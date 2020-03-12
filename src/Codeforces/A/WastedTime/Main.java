@@ -1,6 +1,5 @@
 package Codeforces.A.WastedTime;
 
-import Codeforces.A.VanyaandFence.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,12 +23,12 @@ public class Main {
             XY[i][0] = Integer.parseInt(stk.nextToken());
             XY[i][1] = Integer.parseInt(stk.nextToken());
             if (i >= 1) {
-                double defX = Math.abs(XY[i][0]-XY[i-1][0]);
-                double defY = Math.abs(XY[i][1]-XY[i-1][1]);
-                ans += Math.sqrt(Math.pow(defX, 2)+Math.pow(defY, 2));
+                double defX = Math.abs(XY[i][0] - XY[i - 1][0]);
+                double defY = Math.abs(XY[i][1] - XY[i - 1][1]);
+                ans += Math.sqrt(Math.pow(defX, 2) + Math.pow(defY, 2));
             }
         }
-        System.out.println((ans/speed)*K);
+        System.out.println((ans / speed) * K);
     }
 
 }
