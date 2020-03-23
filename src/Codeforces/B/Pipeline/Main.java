@@ -1,58 +1,61 @@
 package Codeforces.B.Pipeline;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.ByteBuffer;
-import java.util.StringTokenizer;
+import java.util.Scanner;
+
 
 public class Main {
 
-    static Long n, k;
-    static Long min;
+    public static long sumOfPipes(long n, long k) {
 
-    public static void main(String[] args) throws IOException {
+        long left = 1;
+        long right = k;
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer stk = new StringTokenizer(in.readLine());
-
-        n = Long.parseLong(stk.nextToken());
-        k = Long.parseLong(stk.nextToken());
-
-        min = Long.MAX_VALUE;
-        
-        if(n==1){
-            System.out.println("0");
-            return;
-        }
-        
-        solve(Long.valueOf(2), Long.valueOf(0), Long.valueOf(0));
-        if (min == Long.MAX_VALUE) {
-            System.out.println(-1);
-        } else {
-            System.out.println(min);
+        while (left < right) {
+            long mid = (left + right) / 2;
+            long s = sum(mid, k);
+            if (s == n) {
+                return k - mid + 1;
+            } else if (s > n) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
         }
 
+        return k - left + 2;
     }
 
-    static void solve(Long curr, Long total, Long num) {
-        if (total > n) {
-            return;
+    static long sum(long left, long right) {
+        long s = 0;
+        if (left <= right) {
+            s = sum(right) - sum(left - 1);
         }
-        if (total == n) {
-            min = Math.min(min, num);
-            return;
-        }
-        if (curr > k) {
-            return;
-        }
-        if (num == 0) {
-            solve(curr + 1, total + curr, num + 1);
-            solve(curr + 1, total, num);
-        } else {
-            solve(curr + 1, total + curr - 1, num + 1);
-            solve(curr + 1, total, num);
-        }
+        return s;
     }
 
+    static long sum(long k) {
+        return k * (k + 1) / 2;
+    }
+
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        long n = in.nextLong();
+        long k = in.nextLong();
+        if (n == 1) {
+            System.out.println(0);
+        } else if (k >= n) {
+            System.out.println(1);
+        } else {
+            n -= 1;
+            k -= 1;
+
+            if (sum(k) < n) {
+                System.out.println(-1);
+            } else {
+
+                System.out.println(sumOfPipes(n, k));
+
+            }
+        }
+    }
 }
