@@ -14,18 +14,15 @@ public class Main {
         f:
         while (t-- > 0) {
             int a = Integer.parseInt(in.readLine());
-            Boolean isYes = false;
-            for (int i = 3; i <= 8; i++) {
-                double res = 180 * (i - 2) / i;
-                if (res == a) {
-                    sb.append("YES\n");
-                    isYes = true;
-                    break;
-                }
-            }
-            if (!isYes) {
+            double out = 180 - a;
+            double num = 360 / out;
+            int intNum = (int) num;
+            if (num % 1 != 0) {
                 sb.append("NO\n");
+            } else {
+                sb.append("YES\n");
             }
+
         }
         System.out.print(sb);
     }

@@ -3,7 +3,11 @@ package Codeforces.A.GoodNumber;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -17,28 +21,28 @@ public class Main {
         int n = Integer.parseInt(stk.nextToken());
         int k = Integer.parseInt(stk.nextToken());
 
-        Boolean nums[] = new Boolean[k + 1];
-        Arrays.fill(nums, false);
-
-        String arr[] = new String[n];
         for (int i = 0; i < n; i++) {
-            arr[i] = in.readLine();
+            String str = in.readLine();
+            Boolean[] is = new Boolean[k + 1];
+            Arrays.fill(is, false);
+            Map<Character, Integer> map = new HashMap<>();
 
-            for (int j = 0; j < arr[i].length(); j++) {
-                int curr = Integer.parseInt(arr[i].charAt(j) + "");
-                if (curr <= k) {
-                    nums[curr] = true;
+            for (int j = 0; j < str.length(); j++) {
+                if (!map.containsKey(str.charAt(j))) {
+                    int curr = Integer.parseInt(str.charAt(j) + "");
+                    if (curr <= k) {
+                        map.put(str.charAt(j), curr);
+                        is[curr] = true;
+                    }
                 }
             }
-            Boolean isGood = true;
             for (int j = 0; j < k + 1; j++) {
-                if (!nums[j]) {
-                    isGood = false;
+                if (!is[j]) {
                     break;
                 }
-            }
-            if (isGood) {
-                ++ans;
+                if (j >= k) {
+                    ans++;
+                }
             }
         }
         System.out.print(ans);
