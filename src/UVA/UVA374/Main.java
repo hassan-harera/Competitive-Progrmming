@@ -12,9 +12,6 @@ public class Main {
 
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-
-        int k = 2147483647;
-        System.out.println(new BigInteger("2147483647").pow(k/1000000));
         
         String str;
         while (!(str = in.readLine()).equals("")) {
