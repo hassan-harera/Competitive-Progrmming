@@ -3,6 +3,8 @@ package Codeforces.B.EffectiveApproach;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -12,11 +14,13 @@ public class Main {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(in.readLine());
-        int[] arr = new int[n];
+//        int[] arr = new int[n
+
+        Map<Integer, Integer> map = new HashMap();
 
         StringTokenizer stk = new StringTokenizer(in.readLine());
         for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(stk.nextToken());
+            map.put(Integer.parseInt(stk.nextToken()), i + 1);
         }
 
         int m = Integer.parseInt(in.readLine());
@@ -27,16 +31,12 @@ public class Main {
             ques[i] = Integer.parseInt(stk.nextToken());
         }
 
-        int va  = 0, pe = 0;
+        long va  = 0, pe = 0;
 
         for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (arr[j] == ques[i]) {
-                    pe += n - j;
-                    va  += j + 1;
-                    break;
-                }
-            }
+            int c = map.get(ques[i]);
+            va  += c;
+            pe += (n - c + 1);
         }
 
         System.out.println(va  + " " + pe);
