@@ -3,109 +3,55 @@ package Codeforces.B.KuriyamaMiraisStones;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-
-    static Node[] arr;
-    static Node[] segs;
-    static int c;
 
     public static void main(String[] args) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer stk;
         StringBuilder sb = new StringBuilder();
 
-        c = 0;
         int n = Integer.parseInt(in.readLine());
+        long[] arr1 = new long[n + 1];
+        long[] arr2 = new long[n + 1];
 
-        segs = new Node[n * 2 - 1];
-
-        arr = new Node[n];
+        arr1[0] = 0;
+        arr2[0] = 0;
         stk = new StringTokenizer(in.readLine());
-        for (int i = 0; i < arr.length; i++) {
-            int val = Integer.parseInt(stk.nextToken());
-            arr[i] = new Node(i, i, val);
+        for (int i = 1; i <= n; i++) {
+            arr1[i] = Integer.parseInt(stk.nextToken());
+            arr2[i] = arr1[i];
+        }
+        
+        
+        Arrays.sort(arr2);
+
+        for (int i = 1; i <= n; i++) {
+            arr1[i] += arr1[i - 1];
+            arr2[i] += arr2[i - 1];
         }
 
-        int q = Integer.parseInt(in.readLine());
-        int[][] ques = new int[q][3];
-        for (int i = 0; i < q; i++) {
-
+        int m = Integer.parseInt(in.readLine());
+        int[][] ques = new int[m][3];
+        Long sum;
+        for (int i = 0; i < m; i++) {
             stk = new StringTokenizer(in.readLine());
             ques[i][0] = Integer.parseInt(stk.nextToken());
-            ques[i][1] = -1 + Integer.parseInt(stk.nextToken());
-            ques[i][2] = -1 + Integer.parseInt(stk.nextToken());
+            ques[i][1] = Integer.parseInt(stk.nextToken());
+            ques[i][2] = Integer.parseInt(stk.nextToken());
+            if (ques[i][0] == 1) {
+                sum = new Long(""+arr1[ques[i][2]])-(arr1[ques[i][1] - 1]);
+                sb.append(sum + "\n");
+            } else {
+                sum = new Long(""+arr2[ques[i][2]])-(arr2[ques[i][1] - 1]);
+                sb.append(sum + "\n");
+            }
         }
-        buildSegTree(0, n - 1, 0);
 
-        for (int i = 0; i < q; i++) {
-            System.out.println(getSum(ques[i][1], ques[i][2], 0));
-        }
+        System.out.print(sb);
     }
 
-    private static int buildSegTree(int s, int e, int curr) {
-        if (curr >= segs.length) {
-            return 0;
-        }
-
-        if (s == e) {
-            int c = arr[s].value;
-            segs[curr] = new Node(s, e, c);
-            return c;
-        }
-        int mid = (s + e) / 2;
-        int sum = buildSegTree(s, mid, curr * 2 + 1) + buildSegTree(mid + 1, e, curr * 2 + 2);
-        segs[curr] = new Node(s, e, sum);
-
-        return sum;
-    }
-
-    private static int getSum(int cule, int curi, int curr) {
-        if (curr >= segs.length) {
-            return 0;
-        }
-
-        int l = segs[curr].left;
-        int r = segs[curr].right;
-        if (l >= segs.length || r >= segs.length) {
-            return 0;
-        }
-
-        int sum = 0;
-        int mid = (l + r) / 2;
-
-        if (l == r) {
-            int c = arr[cule].value;
-            return c;
-        }
-        if (cule == curi) {
-            int c = arr[cule].value;
-            return c;
-        }
-
-        if (l > curi || r < cule) {
-            return 0;
-        } else if (l >= cule && l <= curi && r >= cule && r <= curi) {
-            return segs[curr].value;
-        }
-        if (mid <= r && mid >= l) {
-            sum += getSum(cule, curi, curr * 2 + 1);
-        }
-        if (mid + 1 >= l && mid + 1 <= r) {
-            sum += getSum(cule, curi, curr * 2 + 2);
-        }
-        return sum;
-    }
-}
-
-class Node {
-
-    int left, right, value;
-
-    public Node(int left, int right, int value) {
-        this.left = left;
-        this.right = right;
-        this.value = value;
-    }
 }
