@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -29,6 +30,9 @@ public class Main {
         }
         char[][] grid = new char[n][m];
 
+        Boolean chars[] = new Boolean[26];
+        Arrays.fill(chars, false);
+
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 grid[i][j] = sts[i].charAt(j);
@@ -38,33 +42,39 @@ public class Main {
             }
         }
         int res = 0;
+        int max = 0;
+        int max2 = 0;
+
         for (Desk pre : pres) {
-            int max = 0;
             if (pre.c - 1 >= 0) {
-                if (grid[pre.r][pre.c - 1] != '.' && grid[pre.r][pre.c - 1] != c) {
+                if (grid[pre.r][pre.c - 1] != '.' && grid[pre.r][pre.c - 1] != c && !chars[grid[pre.r][pre.c - 1] - 'A']) {
                     max++;
+                    chars[grid[pre.r][pre.c - 1] - 'A'] = true;
                 }
             }
             if (pre.c + 1 < m) {
-                if (grid[pre.r][pre.c + 1] != '.' && grid[pre.r][pre.c + 1] != c) {
+                if (grid[pre.r][pre.c + 1] != '.' && grid[pre.r][pre.c + 1] != c && !chars[grid[pre.r][pre.c + 1] - 'A']) {
                     max++;
+                    chars[grid[pre.r][pre.c + 1] - 'A'] = true;
                 }
             }
-            res = Integer.max(res, max);
-            max = 0;
+
             if (pre.r - 1 >= 0) {
-                if (grid[pre.r - 1][pre.c] != '.' && grid[pre.r - 1][pre.c] != c) {
+                if (grid[pre.r - 1][pre.c] != '.' && grid[pre.r - 1][pre.c] != c && !chars[grid[pre.r - 1][pre.c] - 'A']) {
                     max++;
+                    chars[grid[pre.r - 1][pre.c] - 'A'] = true;
                 }
             }
             if (pre.r + 1 < n) {
-                if (grid[pre.r + 1][pre.c] != '.' && grid[pre.r + 1][pre.c] != c) {
+                if (grid[pre.r + 1][pre.c] != '.' && grid[pre.r + 1][pre.c] != c && !chars[grid[pre.r + 1][pre.c] - 'A']) {
                     max++;
+                    chars[grid[pre.r + 1][pre.c] - 'A'] = true;
+
                 }
             }
-            res = Integer.max(res, max);
         }
-        System.out.println(res);
+        res = Integer.max(max2, max);
+        System.out.println(max);
     }
 }
 

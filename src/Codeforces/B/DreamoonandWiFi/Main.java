@@ -59,14 +59,31 @@ public class Main {
         }
         double total = Math.pow(2, numQ);
 
-        int difP = numP1 - numP2;
-        int difM = numM1 - numM2;
-        Double proP = 1.0 * difP / numQ;
-        Double proM = 1.0 * difM / numQ;
-        if (proM == 1 || proP == 1) {
-            System.out.println(1 / total);
-            return;
-        }
-        System.out.println((1.0 * proM / total + 1.0 * proP / total) / 0.5);
+        int difP = numQ-(numP1 - numP2);
+        int difM = numQ-(numM1 - numM2);
+        int numM = numM1 - numM2;
+        int numP = numP1 - numP2;
+        long numQfac = fac(numQ);
+        long difPfac = fac(difP);
+        long difMfac = fac(difM);
+        long Mfac = fac(numM);
+        long Pfac = fac(numP);
+        
+        double a = (numQfac / (difPfac*Pfac));
+        double b = (numQfac / (difMfac*Mfac));
+        double g = (a + b) / 2;
+        double ans= g / total;
+        System.out.println(ans);
     }
+
+    public static long fac(long a) {
+        if(a == 0)
+            return 1;
+        int t = 1;
+        for (int i = 2; i <= a; i++) {
+            t *= i;
+        }
+        return t;
+    }
+
 }

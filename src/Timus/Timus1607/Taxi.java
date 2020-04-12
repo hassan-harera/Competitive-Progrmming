@@ -11,7 +11,6 @@ public class Taxi {
 
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer stk;
-        StringBuilder sb = new StringBuilder();
 
         stk = new StringTokenizer(in.readLine());
 
@@ -24,24 +23,19 @@ public class Taxi {
             System.out.println(num1);
             return;
         }
-        int intialDiff = num3 - num1;
+        int i = 0;
+        while (true) {
 
-        int times = intialDiff / (num2 + num4);
+            if (num1 + (i * num2) >= num3 - (num4 * i)) { //if the guys offer is greater than or equal to the taxis then take it
+                System.out.println(num1 - (i * num2));
+                break;
+            }
 
-        if ((num1 + num2 * times) >= (num3 - num4 * times)) {
-            System.out.println((num1 + num2 * times));
-            return;
+            if (num1 + ((i + 1) * num2) >= num3 - (num4 * i)) { //if the guys next offer will be more than the current taxis then take the taxis
+                System.out.println(num3 - (num4 * i));
+                break;
+            }
+            i++;
         }
-        if ((num3 - num4 * (times + 1)) == (num1 + num2 * (times))) {
-            System.out.println((num3 - num4 * (times + 1)));
-            return;
-        }
-        if ((num1 + num2 * (times + 1)) >= (num3 - num4 * times)) {
-            System.out.println((num1 + num2 * (times + 1)));
-            return;
-        }
-
-        System.out.println((num1 + num2 * (times + 1)));
-
     }
 }

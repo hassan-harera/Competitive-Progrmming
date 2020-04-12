@@ -5,15 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 public class Main {
 
-    static Map<Integer, Integer>[] graph;
+    static List<Integer>[] graph;
 
     public static void main(String[] args) throws IOException {
 
@@ -25,65 +22,57 @@ public class Main {
         n = Integer.parseInt(stk.nextToken());
         m = Integer.parseInt(stk.nextToken());
 
-        graph = new HashMap[n + 1];
-
-        for (int i = 0; i <= n; i++) {
-            graph[i] = new HashMap<>();
+        graph = new List[n];
+        for (int i = 0; i < n; i++) {
+            graph[i] = new ArrayList<>();
         }
-
-        Map<Integer, Integer> Ms = new HashMap();
 
         for (int i = 0; i < m; i++) {
             stk = new StringTokenizer(in.readLine());
 
             int a = Integer.parseInt(stk.nextToken());
             int b = Integer.parseInt(stk.nextToken());
-            if (!Ms.containsKey(a)) {
-                Ms.put(a, i + a);
-            }
-            if (!Ms.containsKey(b)) {
-                Ms.put(b, i + b);
-            }
-            graph[a].put(b, i);
-            graph[b].put(a, i);
+
+            graph[a - 1].add(b - 1);
+            graph[b - 1].add(a - 1);
         }
+        int count = 0, ans = 0;
+        List<Integer> toRemove = new ArrayList<>();
+        Boolean[] arr = new Boolean[n];
+        Arrays.fill(arr, false);
 
-        int ans = 0;
-
-        if (m > 0) {
-            Set<Integer> list = Ms.keySet();
-
-            Boolean[] vis = new Boolean[n + 1];
-            Arrays.fill(vis, false);
-
-//            int max = -1;
-//            for (int i = 1; i <= n; i++) {
-//                int j = graph[i].keySet().size();
-//                if(j == 1){
-//                    max = i;
-//                    break;
-//                }
-//            }
-
-            for (Integer v : graph[1].keySet()) {
-                graph[v].remove(1);
-                vis[1] = true;
-            }
-            ans++;
-
-            for (Integer integer : list) {
-                if (!vis[integer] && graph[integer].keySet().size() <= 1) {
-                    ans++;
-                    vis[integer] = true;
-                    for (Integer v : graph[integer].keySet()) {
-                        graph[v].remove(integer);
-                    }
+        while (count <= n - 2) {
+            Boolean b = false;
+            for (int i = 0; i < n; i++) {
+                if (count >= n - 1) {
+                    break;
                 }
+
+                if (!arr[i] && graph[i].size() == 1) {
+                    arr[i] = true;
+                    count++;
+                    b = true;
+                    toRemove.add(i);
+                } else if (!arr[i] && graph[i].isEmpty()) {
+                    arr[i] = true;
+                    count++;
+                }
+
             }
-        } else {
-            System.out.println(0);
-            return;
+            for (Integer integer : toRemove) {
+                if (!graph[integer].isEmpty()) {
+                    graph[graph[integer].get(0)].remove(integer);
+                }
+                graph[integer].clear();
+            }
+            toRemove.clear();
+
+            if (b) {
+                ans++;
+            } else {
+                break;
+            }
         }
-        System.out.println(n - ans);
+        System.out.println(ans);
     }
 }
