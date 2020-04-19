@@ -22,24 +22,24 @@ public class Main {
 
         qplace = (vq * t);
 
+        
+        if(vq >= vd){
+            System.out.println("0");
+            return;
+        }
         int bijs = 0;
-        for (int i = 1; i <= 100000; i++) {
-            double hs = (dplace)/(vd -vq);
-//            double qdist = hs * vq;
-            double ddist = hs * vd;
-            if (qplace >= c) {
-                break;
-            }
-            dplace += ddist;
-            qplace += qdist;
-            if (dplace >= c) {
-                break;
-            }
-            if (dplace >= qplace) {
+
+        while (true) {
+            double hs = (qplace - dplace) / (vd - vq);
+            dplace += (hs * vd);
+            qplace += (hs * vq);
+            if (qplace < c) {
                 bijs++;
-                double k = (f + (qplace / vd));
-//                qplace += k;
-                dplace = dplace/vd;
+                double k = ((dplace / vd) + f);
+                qplace += (k * vq);
+                dplace = 0;
+            }else {
+                break;
             }
         }
 
