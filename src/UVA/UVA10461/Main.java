@@ -39,6 +39,7 @@ public class Main {
             int b = Integer.parseInt(stk.nextToken());
 
             graph[a].add(b);
+            graph[b].add(a);
         }
 
         int q = Integer.parseInt(in.readLine());
@@ -54,20 +55,40 @@ public class Main {
         Queue<Integer> q = new LinkedList();
         q.add(a);
         int[] total = (int[]) Arrays.copyOf(time, time.length);
-        int max = -1;
-        int min = Integer.MAX_VALUE;
-        while (!q.isEmpty()) {
-            int curr = q.poll();
-            if (!graph[curr].isEmpty()) {
-                for (Integer o : graph[curr]) {
-                    total[o] += total[curr];
-                    q.add(o);
-                }
-            } else {
-                max = Integer.max(max, total[curr]);
-                min = Integer.min(min, total[curr]);
+        Boolean max[] = new Boolean[time.length];
+        Arrays.fill(max, false);
+        max[a] = true;
+        Boolean min[] = new Boolean[time.length];
+        Arrays.fill(min, false);
+//        
+//        while (!q.isEmpty()) {
+//            int curr = q.poll();
+//            for (Integer o : graph[curr]) {
+//                if (!max[o]) {
+//                    max[o] = true;
+//                    q.add(o);
+//                }
+//            }
+//        }
+
+        for (Integer o : graph[a]) {
+            if (!min[o]) {
+                min[o] = true;
+                q.add(o);
             }
         }
-        return max-min;
+        int ma = 0;
+        int mi = 0;
+        for (int i = 0; i < time.length; i++) {
+            if (i != a) {
+                ma += time[i];
+            }
+        }
+        for (int i = 0; i < time.length; i++) {
+            if (min[i]) {
+                mi += time[i];
+            }
+        }
+        return ma - mi;
     }
 }
