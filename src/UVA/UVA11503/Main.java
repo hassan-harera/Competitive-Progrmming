@@ -19,7 +19,7 @@ public class Main {
 
             parents = new int[n * 2 + 1];
             rank = new int[n * 2 + 1];
-            for (int i = 1; i < n + 1; i++) {
+            for (int i = 1; i < parents.length; i++) {
                 parents[i] = i;
                 rank[i] = 1;
             }
@@ -57,14 +57,15 @@ public class Main {
     public static int union(int a, int b) {
         int ap = find(a);
         int bp = find(b);
-        if (rank[ap] <= rank[bp]) {
+        if (ap != bp) {
+            if (rank[ap] < rank[bp]) {
+                parents[ap] = bp;
+                return rank[bp] += rank[ap];
+            }
             parents[bp] = ap;
-            rank[bp] += rank[ap];
-        } else {
-            parents[ap] = bp;
-            rank[ap] += rank[bp];
+            return rank[ap] += rank[bp];
         }
-        return Integer.max(rank[ap], rank[bp]);
+        return rank[ap];
     }
 
 }

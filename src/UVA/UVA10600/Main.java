@@ -76,6 +76,24 @@ public class Main {
                 }
             }
             System.out.print(" " + secCosr + "\n");
+            /*
+                    for(i = 0; i < idx; i++) {
+            cost = 0;
+            E[ontree[i]].enable = 1;
+            init(n);
+            int cnt = 0;
+            for(j = 0; j < m; j++) {
+                if(!E[j].enable && joint(E[j].x, E[j].y)) {
+                    cost += E[j].v;
+                    cnt++;
+                }
+            }
+            E[ontree[i]].enable = 0;
+            if(mincost > cost && cnt == n-1) // cnt important
+                mincost = cost;
+        }
+        printf("%d\n", mincost);
+             */
 
         }
     }
