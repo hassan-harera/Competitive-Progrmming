@@ -1,4 +1,4 @@
-package A.Keyboard;
+package Codeforces.A.Keyboard;
 
 import java.io.BufferedReader;
 import java.io.IOException;
