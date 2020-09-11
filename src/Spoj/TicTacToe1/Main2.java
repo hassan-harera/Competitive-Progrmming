@@ -1,15 +1,13 @@
 package Spoj.TicTacToe1;
 
-import com.sun.source.tree.CaseTree;
-import com.sun.source.tree.Tree;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main2 {
-
-    static String arr[];
 
     public static void main(String[] args) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -18,9 +16,6 @@ public class Main2 {
 
         int n = Integer.parseInt(in.readLine());
 
-        arr = new String[400000];
-        arr[0] = ".........";
-        buildArr(new StringBuilder("........."), 1, 0);
         while (n-- > 0) {
             sb = new StringBuilder();
             sb.append(in.readLine());
@@ -31,49 +26,40 @@ public class Main2 {
                 in.readLine();
             }
 
-            if (checkValid(sb, 0)) {
-                System.out.println("yes");;
-            } else {
-                System.out.println("no");
-            }
+            BFS(sb.toString());
         }
     }
 
-    private static void buildArr(StringBuilder n, int i, int k) {
-        if (i >= 9) {
-            return;
-        }
+    private static void BFS(String des) {
+        Queue<String> q = new LinkedList();
 
-        for (int j = 0; j < 9; j++) {
-            if (n.charAt(j) == '.') {
-                arr[k * 9 + j + 1] = n.replace(j, j, i % 2 == 0 ? "O" : "X").toString();
-                buildArr(n, i + 1, k + 1);
-            }
-        }
-    }
+        q.add(".........");
 
-    private static Boolean checkValid(StringBuilder n, int k) {
-        for (int j = 0; j < 9; j++) {
-            if (arr[k * 9 + j + 1] == null) {
-                return false;
-            }
-            if (arr[k * 9 + j + 1].equals(n)) {
-                return true;
-            }
-        }
+        Boolean win = false;
+        Boolean X = false;
+        while (!q.isEmpty()) {
+            X  = !X;
 
-        Boolean isValid = false;
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (arr[k * 9 + i + 1].charAt(j) != '.' && arr[k * 9 + i + 1].charAt(j) == n.charAt(j)) {
-                    isValid = isValid || checkValid(n, k*9+i+1);
-                }else if (arr[k * 9 + i + 1].charAt(j) != '.' && arr[k * 9 + i + 1].charAt(j) != n.charAt(j)) {
-                    break;
+            String curr = q.poll();
+            if (curr.equals(des)) {
+                win = true;
+                break;
+            }
+            for (int i = 0; i < 9; i++) {
+                if (curr.charAt(i) == '.') {
+                    if ((X ? 'X' : 'O') == des.charAt(i)) {
+                        String s = curr.substring(0, i) + (X ? "X" : "O") + curr.substring(i + 1, 9);
+                        q.add(s);
+                    }
                 }
             }
         }
-        
-        return isValid;
-    }
 
+        if (win) {
+            System.out.println("yes");
+        } else {
+            System.out.println("no");
+        }
+
+    }
 }
