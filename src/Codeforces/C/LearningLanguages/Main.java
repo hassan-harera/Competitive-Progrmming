@@ -2,10 +2,13 @@ package Codeforces.C.LearningLanguages;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
 
@@ -20,8 +23,12 @@ public class Main {
 
         N = new List[n + 1];
         L = new List[l + 1];
-        Arrays.fill(N, new ArrayList());
-        Arrays.fill(L, new ArrayList());
+        for (int i = 0; i < N.length; i++) {
+            N[i] = new ArrayList();
+        }
+        for (int i = 0; i < L.length; i++) {
+            L[i] = new ArrayList();
+        }
 
         for (int i = 1; i <= n; i++) {
             int nOL = in.nextInt();
@@ -32,48 +39,32 @@ public class Main {
                 N[i].add(ll);
             }
         }
-        
-        int ans = Integer.MAX_VALUE;
-        for (int i = 0; i < n; i++) {
-            ans = Integer.min(search(i + 1), ans);
-        }
-        
-        System.out.println(ans);
+
+        System.out.println(search());
     }
 
-    private static int search(int i) {
-        Queue<Integer> QN = new LinkedList();
-        Queue<Integer> QL = new LinkedList();
-
-        Boolean[] VN = new Boolean[N.length];
-        Boolean[] VL = new Boolean[L.length];
-
-        Arrays.fill(VN, false);
-        Arrays.fill(VL, false);
-
-        QL.add(i + 1);
-
-        while (!QL.isEmpty() || !QN.isEmpty()) {
-            int l = QL.isEmpty() ? 0 : QL.poll();
-            for (Integer integer : L[l]) {
-                if (!VN[integer]) {
-                    QN.add(integer);
-                }
-            }
-            int n = QN.isEmpty() ? 0 : QN.poll();
-            for (Integer integer : N[n]) {
-                if (!VL[integer]) {
-                    QL.add(integer);
-                }
-            }
-            VL[l] = true;
-            VN[n] = true;
-        }
+    private static int search() {
+        Set<Integer> [] set = new Set[N.length];
         
-        int cost = 0;
-        for (int j = 1; j < VN.length; j++) {
-            cost = VN[0] ? cost : cost + 1;
+        Boolean flag = false;
+        for (int j = 1; j < N.length; j++) {
+            if (!N[j].isEmpty()) {
+                flag = true;
+            }
+            for (Integer l : N[j]) {
+                for (Integer n : L[l]) {
+                    if (n != j) {
+                        set[j].add(n);
+                        set[n].add(j);
+                    }
+                }
+            }
         }
-        return cost;
+
+        int count = 0;
+        for (int j = 1; j < N.length; j++) {
+            count = Integer.max(count, set[j].size());
+        }
+        return N.length - 1 - count;
     }
 }
