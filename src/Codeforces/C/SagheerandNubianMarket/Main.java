@@ -30,21 +30,21 @@ public class Main {
             arr[i] = new Pair(i, Integer.parseInt(stk.nextToken()));
         }
 
-        binarySearch(0, n);
+        binarySearch(1, n);
     }
 
     private static void binarySearch(int l, int r) {
         int ans = 0;
         long total = 0;
-        while (l <= r) {
-            int mid = (l + r) / 2;
+        while (l < r) {
+            int mid = (l + r) / 2 + 1;
             for (int i = 1; i < totalPrice.length; i++) {
                 totalPrice[i] = arr[i].price + arr[i].idx * mid;
             }
             Arrays.sort(totalPrice);
             long totalCost = totalCost(mid);
             if (totalCost <= b) {
-                l = mid + 1;
+                l = mid;
                 ans = mid;
                 total = totalCost;
             } else {

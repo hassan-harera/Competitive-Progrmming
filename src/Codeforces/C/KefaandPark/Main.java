@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
@@ -63,10 +61,10 @@ public class Main {
             int cur = q.pop();
 
             for (Integer next : graph[cur]) {
-                if (cost[cur] + (isThereCats[next] ? 1 : 0) <= m) {
-                    cost[next] = isThereCats[next] ? (cost[cur] + (isThereCats[next] ? 1 : 0)) : 0;
-                    q.add(next);
-                }
+//                if (cost[cur] + (isThereCats[next] ? 1 : 0) <= m) {
+                cost[next] = isThereCats[next] ? (cost[cur] + 1) : cost[cur] >= 2 ? cost[cur] : 0;
+                q.add(next);
+//                }
             }
 
             if (graph[cur].isEmpty() && cost[cur] <= m) {
