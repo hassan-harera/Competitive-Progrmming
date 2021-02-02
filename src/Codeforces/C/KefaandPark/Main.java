@@ -39,7 +39,8 @@ public class Main {
             int a1 = Integer.parseInt(stk.nextToken());
             int a2 = Integer.parseInt(stk.nextToken());
 
-            graph[a1 < a2 ? a1 : a2].add(a1 < a2 ? a2 : a1);
+            graph[a1].add(a2);
+            graph[a2].add(a1);
         }
 
         int result = BFS();
@@ -49,25 +50,32 @@ public class Main {
     private static int BFS() {
         int[] cost = new int[graph.length];
         Arrays.fill(cost, Integer.MAX_VALUE);
+
         Boolean[] visited = new Boolean[graph.length];
         Arrays.fill(visited, false);
 
         Stack<Integer> q = new Stack();
+
         q.add(1);
         cost[1] = isThereCats[1] ? 1 : 0;
+        visited[1] = true;
 
         int ans = 0;
         while (!q.isEmpty()) {
             int cur = q.pop();
 
             for (Integer next : graph[cur]) {
-//                if (cost[cur] + (isThereCats[next] ? 1 : 0) <= m) {
-                cost[next] = isThereCats[next] ? (cost[cur] + 1) : cost[cur] >= 2 ? cost[cur] : 0;
-                q.add(next);
-//                }
+                if (!visited[next]) {
+                    cost[next] = (isThereCats[next] ? (cost[cur] + 1) : (cost[cur] > m ? cost[cur] : 0));
+                    q.add(next);
+                    visited[next] = true;
+                }
+            }
+            if (n == 1 && (cost[cur] <= m)) {
+                return ++ans;
             }
 
-            if (graph[cur].isEmpty() && cost[cur] <= m) {
+            if (cur != 1 && graph[cur].size() == 1 && (cost[cur] <= m)) {
                 ans++;
             }
         }
