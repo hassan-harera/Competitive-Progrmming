@@ -32,14 +32,14 @@ public class Main {
             }
         }
 
-        Boolean[][][] visited = new Boolean[R][C][5];
+        int[][][] visited = new int[R][C][5];
         for (int i = 0; i < R; i++) {
             for (int j = 0; j < C; j++) {
-                Arrays.fill(visited[i][j], false);
+                Arrays.fill(visited[i][j], Integer.MAX_VALUE);
             }
         }
 
-        int ans = DFS(visited, startR, startC, 0, 0);
+        int ans = BFS(visited, startR, startC, 0, 0);
 
         if (ans != Integer.MAX_VALUE) {
             System.out.println("Escape possible in " + ans + " steps.");
@@ -48,11 +48,15 @@ public class Main {
         }
     }
 
-    private static int DFS(Boolean[][][] visited, int r, int c, int steps, int key) {
-        if (r < 0 || r >= R || c < 0 || c >= C || grid[r][c] == '#' || visited[r][c][key]) {
+    private static int BFS(int[][][] cost, int r, int c, int steps, int key) {
+        if (r < 0 || r >= R || c < 0 || c >= C || grid[r][c] == '#'){
             return Integer.MAX_VALUE;
         }
-
+        
+        if(grid[r][c] == 'X'){
+            return cost[r][c][key];
+        }
+            
         if (!checkKeyDoor(r, c, key)) {
             return Integer.MAX_VALUE;
         }
@@ -67,7 +71,7 @@ public class Main {
             return steps;
         }
 
-        visited[r][c][key] = true;
+        cost[r][c][key] = true;
 
         int min = Integer.MAX_VALUE;
 
@@ -75,7 +79,7 @@ public class Main {
             int nextR = r + movesX[i];
             int nextC = c + movesY[i];
 
-            min = Integer.min(min, DFS(visited, nextR, nextC, steps + 1, key));
+            min = Integer.min(min, BFS(cost, nextR, nextC, steps + 1, key));
         }
 
         return min;

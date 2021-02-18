@@ -1,5 +1,6 @@
 package Spoj.KeyTask;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -34,18 +35,18 @@ public class Main1 {
             }
         }
 
-        int[][][] cost = new int[R][C][150];
+        boolean[][][] cost = new boolean[R][C][150];
         for (int i = 0; i < R; i++) {
             for (int j = 0; j < C; j++) {
                 for (int k = 0; k < 150; k++) {
-                    cost[i][j][k] = Integer.MAX_VALUE;
+                    cost[i][j][k] = false;
                 }
             }
         }
 
         ans = Integer.MAX_VALUE;
-        cost[startR][startC]['.'] = 0;
-        BFS(startR, startC, cost, new HashSet<Character>(), '.');
+        cost[startR][startC]['.'] = true;
+        BFS(startR, startC, cost, 0, new ArrayList<Character>(),  '.');
 
         if (ans != Integer.MAX_VALUE) {
             System.out.println("Escape possible in " + ans + " steps.");
@@ -54,34 +55,32 @@ public class Main1 {
         }
     }
 
-    private static void BFS(int r, int c, int[][][] cost, HashSet<Character> keys, char key) {
+    private static void BFS(int r, int c, boolean[][][] visited, int steps, ArrayList<Character> keys, char key) {
         if (r < 0 || r >= R || c < 0 || c >= C || grid[r][c] == '#') {
             return;
         }
 
         if (grid[r][c] == 'X') {
-            ans = Integer.min(ans, cost[r][c][key]);
+            ans = Integer.min(ans, steps);
         }
 
         if (grid[r][c] == 'R' || grid[r][c] == 'G' || grid[r][c] == 'Y' || grid[r][c] == 'B') {
-            if (Character.toLowerCase(grid[r][c]) != key) {
+            if (!keys.contains(Character.toLowerCase(grid[r][c]))) {
                 return;
             }
         }
 
         if (grid[r][c] == 'r' || grid[r][c] == 'g' || grid[r][c] == 'y' || grid[r][c] == 'b') {
             keys.add(grid[r][c]);
-            char k = grid[r][c];
-            cost[r][c][k] = cost[r][c][key];
-            key = k;
+            key = grid[r][c];
         }
 
         for (int i = 0; i < movesR.length; i++) {
             int nextR = r + movesR[i];
             int nextC = c + movesC[i];
-            if (cost[r][c][key] + 1 < cost[nextR][nextC][key]) {
-                cost[nextR][nextC][key] = cost[r][c][key] + 1;
-                BFS(nextR, nextC, cost, keys, key);
+            if (!visited[nextR][nextC][key]) {
+                visited[nextR][nextC][key] = true;
+                BFS(nextR, nextC, visited, steps + 1, keys, key);
             }
         }
     }
