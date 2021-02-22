@@ -23,7 +23,7 @@ public class Main {
         n = in.nextInt();
         m = in.nextInt();
         k = in.nextInt();
-        k = -k;
+//        k = -k;
 
         vis = new Boolean[n][m];
         choosed = new Boolean[n][m];
@@ -34,9 +34,9 @@ public class Main {
             for (int j = 0; j < m; j++) {
                 grid[i][j] = line.charAt(j);
 
-                if (grid[i][j] == '.') {
-                    k++;
-                }
+//                if (grid[i][j] == '.') {
+//                    k++;
+//                }
             }
         }
 
@@ -46,8 +46,8 @@ public class Main {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 if (grid[i][j] == '.' && !vis[i][j]) {
-                    clear();
-                    if (solve(i, j, 0)) {
+                    DFS(i, j);
+                    if (k == 0) {
                         break solve;
                     }
                 }
@@ -56,50 +56,31 @@ public class Main {
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                if (grid[i][j] == '.' && !choosed[i][j]) {
-                    grid[i][j] = 'X';
-                }
                 System.out.print(grid[i][j]);
             }
             System.out.println();
         }
     }
 
-    private static boolean solve(int i, int j, int sum) {
-        if (sum == k) {
-            return true;
-        }
-
+    private static void DFS(int i, int j) {
         if (i < 0 || j < 0 || i >= n || j >= m) {
-            return false;
+            return;
         }
 
         if (grid[i][j] != '.' || vis[i][j]) {
-            choosed[i][j] = false;
-            return false;
+            return;
         }
 
         vis[i][j] = true;
-        choosed[i][j] = true;
 
-        if (solve(i, j + 1, sum + 1)) {
-            return true;
-        }
-        if (solve(i + 1, j, sum + 1)) {
-            return true;
-        }
-        if (solve(i - 1, j, sum + 1)) {
-            return true;
-        }
+        DFS(i, j + 1);
+        DFS(i + 1, j);
+        DFS(i - 1, j);
+        DFS(i, j - 1);
 
-        return solve(i, j - 1, sum + 1);
-    }
-
-    private static void clear() {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                choosed[i][j] = false;
-            }
+        if (k > 0) {
+            grid[i][j] = 'X';
+            k--;
         }
     }
 
