@@ -4,24 +4,30 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class Main {
+
+    static ArrayList<Integer> apps[] = new ArrayList[300005];
+    static HashMap<Integer, Integer> notifications = new HashMap();
 
     public static void main(String[] args) throws IOException {
 
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer stk = new StringTokenizer(in.readLine());
 
-        int convert[] = new int[100005];
         int n = Integer.parseInt(stk.nextToken());
         int q = Integer.parseInt(stk.nextToken());
+        int cnt = 1, min = 0;
 
-        ArrayList<Integer> apps[] = new ArrayList[n];
-        HashMap<Integer, Integer> notifications = new HashMap();
-
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < apps.length; i++) {
             apps[i] = new ArrayList();
         }
 
@@ -32,42 +38,23 @@ public class Main {
             int x = Integer.parseInt(stk.nextToken());
 
             if (t == 1) {
-                x--;
-//                convert[i] = apps[x].size();
-                notifications.put(i, x);
-                apps[x].add(i);
+                notifications.put(cnt, 0);
+                apps[x].add(cnt);
+                cnt++;
             } else if (t == 2) {
-                x--;
                 for (int noti : apps[x]) {
                     notifications.remove(noti);
                 }
                 apps[x].clear();
             } else {
-                for (int j = 0; j < x; j++) {
+                for (int j = x; j > 0 && x > 0; j--) {
                     if (notifications.containsKey(j)) {
-                        apps[notifications.get(j)].remove(0);
                         notifications.remove(j);
+                        x--;
                     }
                 }
             }
-
             System.out.println(notifications.size());
         }
     }
-
-//    static class Noti {
-//
-//        int appId, id;
-//        Boolean visit = false;
-//
-//        public Noti(int appId, int id) {
-//            this.appId = appId;
-//            this.id = id;
-//        }
-//
-//        @Override
-//        public boolean equals(Object obj) {
-//            return super.equals(); 
-//        }
-//    }
 }
