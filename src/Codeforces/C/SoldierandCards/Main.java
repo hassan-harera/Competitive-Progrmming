@@ -49,7 +49,7 @@ public class Main {
                 q2.add(c2);
             }
 
-            if (counter >= n * 3) {
+            if (counter >= n * 1000) {
                 System.out.println("-1");
                 return;
             }
