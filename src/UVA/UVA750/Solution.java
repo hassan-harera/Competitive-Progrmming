@@ -1,64 +1,61 @@
-package UVA.UVA750;
+package UVA750;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
 
 public class Solution {
 
-    static List<int[]> ans = new ArrayList();
-    static int r;
-    static boolean[] mainDiagonal = new boolean[18];
-    static boolean[] secondDiagonal = new boolean[18];
-    static boolean[] rows = new boolean[9];
-    static boolean[] cols = new boolean[9];
+    static String ans = "Impossible";
+    static int[] arr = new int[5];
 
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
 
-        int t = in.nextInt();
-        while (t-- > 0) {
-            ans = new ArrayList();
-            Arrays.fill(mainDiagonal, false);
-            Arrays.fill(secondDiagonal, false);
-            Arrays.fill(rows, false);
-            Arrays.fill(cols, false);
-
-            r = in.nextInt();
-            int c = in.nextInt();
-
-            rows[r] = cols[c] = mainDiagonal[c + r] = secondDiagonal[c - r + 8] = true;
-
-            int[] start = new int[9];
-            Arrays.fill(start, -1);
-            start[c] = r;
-
-            solve(1, "");
-
-            System.out.println("1 2 3 4 5 6 7 8");
+        Boolean[][] grid = new Boolean[8][8];
+        for (int i = 0; i < 8; i++) {
+            Arrays.fill(grid[i], false);
         }
+        solve(0, 0, grid);
+//        for (int i = 0; i < 8; i++) {
+//            for (int j = 0; j < 8; j++) {
+//                System.out.print(grid[i][j] + " ");
+//            }
+//            System.out.println("");
+//        }
+
     }
 
-    private static void solve(int c, String ans) {
-        if (c > 8) {
-            System.out.println(ans);
-            return;
+    private static Boolean[][] solve(int r, int c, Boolean[][] grid) {
+        if (r >= 8) {
+            return grid;
         }
-        if (cols[c]) {
-            solve(c + 1, ans + (r) + " ");
-            return;
-        }
-        for (int i = 1; i < 9; i++) {
-            if (!rows[i] && !mainDiagonal[c + i] && !secondDiagonal[c - i + 8]) {
-                rows[i] = true;
-                mainDiagonal[c + i] = true;
-                secondDiagonal[c - i + 8] = true;
-                solve(c + 1, ans + i + " ");
-                rows[i] = false;
-                mainDiagonal[c + i] = false;
-                secondDiagonal[c - i + 8] = false;
+        for (int i = 0; i < 8; i++) {
+            if (!grid[r][i]) {
+                System.out.print(i + " ");
+                solve(r + 1, i, mark(r, i, grid));
             }
         }
+        return grid;
+    }
+
+    private static Boolean[][] mark(int r, int c, Boolean[][] grid) {
+        int i, j;
+        for (i = 0; i < 8; i++) {
+            grid[r][i] = true;
+        }
+        for (i = 0; i < 8; i++) {
+            grid[i][c] = true;
+        }
+        for (i = r, j = c; i < 8 && j < 8; i++, j++) {
+            grid[i][j] = true;
+        }
+        for (i = r, j = c; i < 8 && j >= 0; i++, j--) {
+            grid[i][j] = true;
+        }
+        for (i = r, j = c; i >= 0 && j < 8; i--, j++) {
+            grid[i][j] = true;
+        }
+        for (i = r, j = c; i >= 0 && j >= 0; i--, j--) {
+            grid[i][j] = true;
+        }
+        return grid;
     }
 }
