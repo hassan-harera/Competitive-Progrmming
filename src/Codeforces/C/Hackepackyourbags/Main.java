@@ -1,8 +1,9 @@
 package Codeforces.C.Hackepackyourbags;
 
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
@@ -13,37 +14,48 @@ public class Main {
         int n = in.nextInt();
         int x = in.nextInt();
 
-        HashMap<Integer, Integer> dur_price = new HashMap<>();
+        ArrayList<Integer>[] days = new ArrayList[200005];
+        Point[] vos = new Point[200005];
+        int[] mn = new int[200005];
 
-        for (int i = 0; i < n; i++) {
+        Arrays.fill(mn, Integer.MAX_VALUE);
+        Arrays.fill(days, new ArrayList());
+
+        int L = Integer.MAX_VALUE, R = -1;
+        long ans = Long.MAX_VALUE;
+
+        for (int i = 1; i <= n; i++) {
             int a = in.nextInt();
             int b = in.nextInt();
             int c = in.nextInt();
 
-            int dur = b - a + 1;
-            if (dur_price.containsKey(dur)) {
-                dur_price.replace(dur, Integer.min(dur_price.get(dur), c));
-            } else {
-                dur_price.put(dur, c);
+            vos[i] = new Point(b - a + 1, c);
+            days[a].add(-i);
+            days[b].add(i);
+            L = Integer.min(L, a);
+            R = Integer.max(R, b);
+        }
+        
+        for (int i = L; i <= R; i++) {
+            ArrayList<Integer> dvos = days[i];
+            Collections.sort(dvos);
+
+            for (int j = 0; j < dvos.size(); j++) {
+                int cur = dvos.get(j);
+
+                if (cur < 0) {
+                    cur = -cur;
+                    int len = vos[cur].x;
+                    int reqLen = x - len;
+                    if (reqLen >= 0 && mn[reqLen] < Integer.MAX_VALUE) {
+                        ans = Long.min(ans, (long) (vos[cur].y + mn[reqLen]));
+                    }
+                } else {
+                    int len = vos[cur].x;
+                    mn[len] = Integer.min(mn[len], vos[cur].y);
+                }
             }
         }
-
-        long ans = Long.MAX_VALUE;
-
-//        ArrayList<Integer> durs = new ArrayList();
-//        durs.addAll(dur_price.keySet());
-//        Collections.sort(durs);
-        for (int it : dur_price.keySet()) {
-            long sol = 0;
-
-            if (dur_price.containsKey(x - it)) {
-                sol += dur_price.get(it);
-                sol += dur_price.get(x - it);
-            } else {
-                sol = Long.MAX_VALUE;
-            }
-            ans = Long.min(sol, ans);
-        }
-        System.out.println(ans == Long.MAX_VALUE ? -1 : ans);
+        System.out.println(ans == Integer.MAX_VALUE ? -1 : ans);
     }
 }

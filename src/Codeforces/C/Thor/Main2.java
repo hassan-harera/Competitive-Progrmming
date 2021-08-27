@@ -1,3 +1,4 @@
+package Codeforces.C.Thor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,26 +10,27 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Main {
+public class Main2 {
 
-    static ArrayList<Integer> apps[] = new ArrayList[300005];
-    static HashMap<Integer, Integer> notifications = new HashMap();
+    static int[] a = new int[300005];
+    static int[] b = new int[300005];
+    static int[] c = new int[300005];
 
     public static void main(String[] args) throws IOException {
-
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer stk = new StringTokenizer(in.readLine());
 
         int n = Integer.parseInt(stk.nextToken());
         int q = Integer.parseInt(stk.nextToken());
-        int cnt = 1, min = 0, cnt2 = 1;
 
-        for (int i = 0; i < apps.length; i++) {
-            apps[i] = new ArrayList();
-        }
+        int ans = 0;
+        int popped = 0;
+        int cnt1 = 1, cnt2 = 1;
 
         for (int i = 0; i < q; i++) {
             stk = new StringTokenizer(in.readLine());
@@ -37,23 +39,24 @@ public class Main {
             int x = Integer.parseInt(stk.nextToken());
 
             if (t == 1) {
-                notifications.put(cnt, 0);
-                apps[x].add(cnt);
-                cnt++;
+                a[cnt1++] = x;
+                b[x]++;
+                c[x]++;
+                ans++;
             } else if (t == 2) {
-                for (int noti : apps[x]) {
-                    notifications.remove(noti);
-                }
-                apps[x].clear();
+                ans -= b[x];
+                b[x] = 0;
             } else {
                 while (cnt2 <= x) {
-                    if (notifications.containsKey(cnt2)) {
-                        notifications.remove(cnt2);
-                        cnt2--;
+                    int id = a[cnt2++];
+                    c[id]--;
+                    if (b[id] > c[id]) {
+                        ans--;
+                        b[id]--;
                     }
                 }
             }
-            System.out.println(notifications.size());
+            System.out.println(ans);
         }
     }
 }
