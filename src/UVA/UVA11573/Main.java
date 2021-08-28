@@ -1,16 +1,14 @@
 package UVA.UVA11573;
 
-import java.awt.Point;
-import java.util.LinkedList;
-import java.util.Queue;
+
 import java.util.Scanner;
 
 public class Main {
 
-    static int[][] grid = new int[10005][10005];
-    static int[][] cost = new int[10005][10005];
-    static int[] moveR = new int[]{-1, -1, 0, 1, 1, 1, 0, -1};
-    static int[] moveC = new int[]{0, 1, 1, 1, 0, -1, -1, -1};
+    static int[][] flow;
+    static int[][] cost;
+    static int[] moveR = new int[]{-1, 1, 0, 0, -1, -1, 1, 1};
+    static int[] moveC = new int[]{0, 0, 1, -1, 1, -1, 1, -1};
     static int r, c;
 
     public static void main(String[] args) {
@@ -19,60 +17,48 @@ public class Main {
         r = in.nextInt();
         c = in.nextInt();
 
-        for (int i = 0; i < r; i++) {
+        flow = new int[r + 1][c + 1];
+        cost = new int[r + 1][c + 1];
+
+        for (int i = 1; i <= r; i++) {
             String st = in.next();
-            for (int j = 0; j < c; j++) {
-                grid[i][j] = Integer.parseInt("" + st.charAt(j));
+            for (int j = 1; j <= c; j++) {
+                flow[i][j] = Integer.parseInt("" + st.charAt(j-1));
             }
         }
 
         int p = in.nextInt();
-        int[][] points = new int[p][4];
-
         for (int i = 0; i < p; i++) {
-            for (int j = 0; j < 4; j++) {
-                points[i][j] = in.nextInt();
-            }
+            int cr = in.nextInt(), cc = in.nextInt(), dr = in.nextInt(), dc = in.nextInt();
 
-            for (int k = 0; k < r; k++) {
-                for (int t = 0; t < c; t++) {
+            for (int k = 0; k <= r; k++) {
+                for (int t = 0; t <= c; t++) {
                     cost[k][t] = Integer.MAX_VALUE;
                 }
             }
-            dijstra(points[i]);
-
+            cost[cr][cc] = 0;
+            search(cr, cc);
+            System.out.println(cost[dr][dc]);
         }
     }
 
-    private static void dijstra(int[] arr) {
-        Point s = new Point(arr[0], arr[1]);
+    private static void search(int cr, int cc) {
+        for (int i = 0; i < 8; i++) {
+            int nr = cr + moveR[i];
+            int nc = cc + moveC[i];
+            if (nr > r || nc > c || nr < 0 || nc < 0) {
+                continue;
+            }
 
-        Queue<Point> q = new LinkedList<>();
-        q.add(s);
-
-        cost[s.x][s.y] = 0;
-
-        while (!q.isEmpty()) {
-            Point cur = q.poll();
-
-            for (int i = 0; i < 7; i++) {
-                Point next = new Point(cur.x + moveR[i], cur.y + moveC[i]);
-                if (next.x > r || next.y > c || next.x < 0 || next.y < 0) {
-                    continue;
+            if (flow[cr][cc] == i) {
+                if (cost[nr][nc] > cost[cr][cc]) {
+                    cost[nr][nc] = cost[cr][cc];
+                    search(nr, nc);
                 }
-
-                if (grid[cur.x][cur.y] == i) {
-                    if (cost[next.x][next.y] > cost[cur.x][cur.y]) {
-                        cost[next.x][next.y] = cost[cur.x][cur.y];
-                        q.add(next);
-                    }
-                } else if (cost[next.x][next.y] > cost[cur.x][cur.y] + 1) {
-                    cost[next.x][next.y] = cost[cur.x][cur.y] + 1;
-                    q.add(next);
-                }
+            } else if (cost[nr][nc] > cost[cr][cc] + 1) {
+                cost[nr][nc] = cost[cr][cc] + 1;
+                search(nr, nc);
             }
         }
-        Point d = new Point(arr[2], arr[3]);
-        System.out.println(cost[d.x][d.y]);
     }
 }
