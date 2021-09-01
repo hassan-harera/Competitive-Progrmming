@@ -14,48 +14,36 @@ public class Main {
 
         int n = in.nextInt(), a = in.nextInt(), b = in.nextInt();
 
-        if (a + b >= n) {
-            System.out.println("-1");
-            return;
-        }
-        if (b == 0 && n - a == 1) {
+        if (a + 1 >= n && n > 1) {
             System.out.println("-1");
             return;
         }
 
         int[] arr = new int[n];
-        arr[0] = 1;
-        int ind = 1;
-        int sum = 1;
+        int ind, sum, mx;
+        arr[0] = 2;
+        ind = 1;
+        sum = arr[0];
+        mx = arr[0];
 
-        if (b == 0) {
-            while (ind < (n - a)) {
-                arr[ind] = 1;
-                ind++;
-            }
+        while (b > 0 && ind < n) {
+            arr[ind] = sum + 1;
+            mx = Integer.max(mx, arr[ind]);
+            sum += sum + 1;
+            ind++;
+            b--;
+        }
 
-            while (ind < (n)) {
-                arr[ind] = arr[ind - 1] + 1;
-                ind++;
-            }
-        } else {
-            while (ind < (n - a + 1)) {
-                arr[ind] = sum + 1;
-                sum += sum + 1;
-                ind++;
-            }
-            for (int i = ind; ind < (b + 1); ind++) {
-                arr[ind] = sum + 1;
-                sum += sum + 1;
-            }
+        while (ind < n - a) {
+            arr[ind] = 1;
+            ind++;
+        }
 
-            for (int i = (b + 1); i < (b + 1 + a); i++) {
-                arr[i] = arr[i - 1] + 1;
-            }
-
-            for (int i = (b + 1 + a); i < (n); i++) {
-                arr[i] = 1;
-            }
+        while (a > 0 && ind < n) {
+            arr[ind] = mx + 1;
+            mx = Integer.max(mx, arr[ind]);
+            ind++;
+            a--;
         }
 
         for (int i : arr) {
