@@ -1,7 +1,5 @@
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.jvm.JvmStatic
 import kotlin.math.max
 
 
@@ -21,17 +19,17 @@ fun main() {
         sumCom[i] = cur
     }
 
-    for (i in 1 until sumCom.size) {
+    for (i in 1..n) {
         sumCom[i] += sumCom[i - 1]
     }
 
-    for (i in 1 until sumCom.size) {
-        for (j in 1..0 + 1) {
+    for (i in 1..n) {
+        for (j in 1..i) {
             list.add(
                 Area(
                     l = j,
                     r = i,
-                    sum = sumCom[i] - sumCom[j],
+                    sum = sumCom[i] - sumCom[j - 1],
                 )
             )
         }
@@ -41,7 +39,7 @@ fun main() {
         it.sum
     }
 
-    var ans = 0
+    var ans = -1005
     list.forEach {
         val smallest = ArrayList<Int>()
         val biggest = ArrayList<Int>()
@@ -49,7 +47,7 @@ fun main() {
         for (i in it.l..it.r)
             smallest.add(arr[i])
 
-        for (j in 0 until it.l)
+        for (j in 1 until it.l)
             biggest.add(arr[j])
 
         for (j in it.r + 1..n)
@@ -62,7 +60,7 @@ fun main() {
         for (i in 0 until k) {
             if (i >= smallest.size || i >= biggest.size)
                 break
-            ans = max(
+            sum = max(
                 sum,
                 sum - smallest[i] + biggest[i]
             )
