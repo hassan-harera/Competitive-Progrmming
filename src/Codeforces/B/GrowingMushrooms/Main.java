@@ -30,8 +30,8 @@ public class Main {
             int b = Integer.parseInt(stk.nextToken());
 
             ps[i] = new Participant(a, b);
-            float total = (ps[i].before * t1 * (per/100)) + ps[i].after * t2;
-            fp[i] = new FinalParticipant(i+1, total);
+            float total = (ps[i].before * t1 * (per / 100)) + ps[i].after * t2;
+            fp[i] = new FinalParticipant(i + 1, total);
 
         }
 
@@ -42,41 +42,42 @@ public class Main {
             System.out.println(fp[i].idx + " " + fp[i].total);
         }
     }
-}
 
-class Participant {
 
-    int before;
-    int after;
+    static class Participant {
 
-    public Participant(int b, int a) {
-        if (a <= b) {
-            before = a;
-            after = b;
-        } else {
-            after = a;
-            before = b;
+        int before;
+        int after;
 
+        public Participant(int b, int a) {
+            if (a <= b) {
+                before = a;
+                after = b;
+            } else {
+                after = a;
+                before = b;
+
+            }
         }
+
     }
 
-}
+    static class FinalParticipant implements Comparable<FinalParticipant> {
 
-class FinalParticipant implements Comparable<FinalParticipant> {
+        int idx;
+        double total;
 
-    int idx;
-    double total;
-
-    public FinalParticipant(int idx, double total) {
-        this.total = total;
-        this.idx = idx;
-    }
-
-    @Override
-    public int compareTo(FinalParticipant o) {
-        if (total != o.total) {
-            return (int) (o.total - total);
+        public FinalParticipant(int idx, double total) {
+            this.total = total;
+            this.idx = idx;
         }
-        return idx - o.idx;
+
+        @Override
+        public int compareTo(FinalParticipant o) {
+            if (total != o.total) {
+                return (int) (o.total - total);
+            }
+            return idx - o.idx;
+        }
     }
 }
